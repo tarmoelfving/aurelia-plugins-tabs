@@ -76,6 +76,7 @@ System.register(['aurelia-dependency-injection', 'aurelia-templating', 'aurelia-
           });
           if (!active) return;
           document.querySelector('#' + active.id).classList.add('active');
+          document.querySelector('#tabPill_' + active.id).classList.add('active');
         };
 
         Tabs.prototype.show = function show(event) {
@@ -83,15 +84,17 @@ System.register(['aurelia-dependency-injection', 'aurelia-templating', 'aurelia-
           var target = event.target;
           var active = event.target.parentElement.parentElement.querySelector('a.nav-link.active');
           var targetHref = target.getAttribute('href');
-          this._eventAggregator.publish('aurelia-plugins:tabs:tab-clicked:' + targetHref.replace('#', ''), event);
           if (!target.classList.contains('active')) {
             target.classList.add('active');
             document.querySelector(targetHref).classList.add('active');
+            document.querySelector('#' + target.parentElement.id).classList.add('active');
           }
-          if (active) {
+          if (active != target) {
+            this._eventAggregator.publish('aurelia-plugins:tabs:tab-clicked:' + targetHref.replace('#', ''), event);
             var activeHref = active.getAttribute('href');
             active.classList.remove('active');
             document.querySelector(activeHref).classList.remove('active');
+            document.querySelector('#' + active.parentElement.id).classList.remove('active');
           }
         };
 

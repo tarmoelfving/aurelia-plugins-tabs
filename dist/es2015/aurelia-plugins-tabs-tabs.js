@@ -59,6 +59,7 @@ export let Tabs = (_dec = customElement('aup-tabs'), _dec2 = inject(Element, Eve
     var active = this.tabs.find(tab => tab.active);
     if (!active) return;
     document.querySelector('#' + active.id).classList.add('active');
+    document.querySelector('#tabPill_' + active.id).classList.add('active');
   }
 
   show(event) {
@@ -66,15 +67,17 @@ export let Tabs = (_dec = customElement('aup-tabs'), _dec2 = inject(Element, Eve
     var target = event.target;
     var active = event.target.parentElement.parentElement.querySelector('a.nav-link.active');
     var targetHref = target.getAttribute('href');
-    this._eventAggregator.publish('aurelia-plugins:tabs:tab-clicked:' + targetHref.replace('#', ''), event);
     if (!target.classList.contains('active')) {
       target.classList.add('active');
       document.querySelector(targetHref).classList.add('active');
+      document.querySelector('#' + target.parentElement.id).classList.add('active');
     }
-    if (active) {
+    if (active != target) {
+      this._eventAggregator.publish('aurelia-plugins:tabs:tab-clicked:' + targetHref.replace('#', ''), event);
       var activeHref = active.getAttribute('href');
       active.classList.remove('active');
       document.querySelector(activeHref).classList.remove('active');
+      document.querySelector('#' + active.parentElement.id).classList.remove('active');
     }
   }
 }, (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'tabs', [bindable], {
