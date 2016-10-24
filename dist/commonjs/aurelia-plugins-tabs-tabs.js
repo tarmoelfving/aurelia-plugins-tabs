@@ -81,12 +81,16 @@ var Tabs = exports.Tabs = (_dec = (0, _aureliaTemplating.customElement)('aup-tab
     var target = event.target;
     var active = event.target.parentElement.parentElement.querySelector('a.nav-link.active');
     var targetHref = target.getAttribute('href');
-    var activeHref = active.getAttribute('href');
     this._eventAggregator.publish('aurelia-plugins:tabs:tab-clicked:' + targetHref.replace('#', ''), event);
-    target.classList.add('active');
-    active.classList.remove('active');
-    document.querySelector(targetHref).classList.add('active');
-    document.querySelector(activeHref).classList.remove('active');
+    if (!target.classList.contains('active')) {
+      target.classList.add('active');
+      document.querySelector(targetHref).classList.add('active');
+    }
+    if (active) {
+      var activeHref = active.getAttribute('href');
+      active.classList.remove('active');
+      document.querySelector(activeHref).classList.remove('active');
+    }
   };
 
   return Tabs;
